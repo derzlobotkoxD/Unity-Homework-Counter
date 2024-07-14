@@ -1,10 +1,10 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Counter : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _text;
+    public event UnityAction<int> Changed;
 
     private float _delay = 0.5f;
     private bool _isWork = false;
@@ -12,7 +12,6 @@ public class Counter : MonoBehaviour
 
     private void Start()
     {
-        _text.text = "0";
         coroutine = IncreaseNumber(_delay);
     }
 
@@ -30,7 +29,7 @@ public class Counter : MonoBehaviour
         while (true)
         {
             currentNumber++;
-            DisplayNumber(currentNumber);
+            Changed?.Invoke(currentNumber);
 
             yield return Wait;
         }
@@ -49,7 +48,4 @@ public class Counter : MonoBehaviour
             _isWork = true;
         }
     }
-
-    private void DisplayNumber(int number) =>
-        _text.text = number.ToString();
 }
