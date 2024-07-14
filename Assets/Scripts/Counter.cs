@@ -21,20 +21,6 @@ public class Counter : MonoBehaviour
             Switch();
     }
 
-    private IEnumerator IncreaseNumber(float delay)
-    {
-        var wait = new WaitForSeconds(delay);
-        int currentNumber = 0;
-
-        while (true)
-        {
-            currentNumber++;
-            Changed?.Invoke(currentNumber);
-
-            yield return wait;
-        }
-    }
-
     private void Switch()
     {
         if (_isWork && _coroutine != null)
@@ -47,6 +33,20 @@ public class Counter : MonoBehaviour
         {
             StartCoroutine(_coroutine);
             _isWork = true;
+        }
+    }
+
+    private IEnumerator IncreaseNumber(float delay)
+    {
+        var wait = new WaitForSeconds(delay);
+        int currentNumber = 0;
+
+        while (true)
+        {
+            currentNumber++;
+            Changed?.Invoke(currentNumber);
+
+            yield return wait;
         }
     }
 }
