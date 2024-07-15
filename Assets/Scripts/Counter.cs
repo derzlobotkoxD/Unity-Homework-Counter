@@ -4,16 +4,12 @@ using UnityEngine.Events;
 
 public class Counter : MonoBehaviour
 {
+    private int _currentNumber = 0;
     private float _delay = 0.5f;
-    private bool _isWork = false;
-    private IEnumerator _coroutine;
+
+    private Coroutine _coroutine;
 
     public event UnityAction<int> Changed;
-
-    private void Start()
-    {
-        _coroutine = IncreaseNumber(_delay);
-    }
 
     private void Update()
     {
@@ -23,28 +19,25 @@ public class Counter : MonoBehaviour
 
     private void Switch()
     {
-        if (_isWork && _coroutine != null)
+        if (_coroutine != null)
         {
             StopCoroutine(_coroutine);
-
-            _isWork = false;
+            _coroutine = null;
         }
         else
         {
-            StartCoroutine(_coroutine);
-            _isWork = true;
+            _coroutine = StartCoroutine(IncreaseNumber(_delay));
         }
     }
 
     private IEnumerator IncreaseNumber(float delay)
     {
         var wait = new WaitForSeconds(delay);
-        int currentNumber = 0;
 
-        while (true)
+        while (enabled)
         {
-            currentNumber++;
-            Changed?.Invoke(currentNumber);
+            _currentNumber++;
+            Changed?.Invoke(_currentNumber);
 
             yield return wait;
         }
